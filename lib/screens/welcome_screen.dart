@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:registration_system/screens/registration_screen.dart';
+import 'package:registration_system/screens/students_list_screen.dart';
 import 'package:registration_system/widgets/app_icon.dart';
 import 'package:registration_system/widgets/custome_elevated_button.dart';
 
@@ -65,14 +67,20 @@ class WelcomeScreen extends StatelessWidget {
                   children: [
                     CustomElevatedButton(
                       title: 'Register new Student',
-                      handler: () {},
+                      handler: () {
+                        Navigator.pushNamed(
+                            context, RegistrationScreen.routeName);
+                      },
                     ),
                     SizedBox(
                       height: size.height * 0.02,
                     ),
                     CustomElevatedButton(
                       title: 'View Students',
-                      handler: () {},
+                      handler: () {
+                        Navigator.pushNamed(
+                            context, StudentsListScreen.routeName);
+                      },
                     ),
                   ],
                 ),
