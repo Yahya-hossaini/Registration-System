@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:registration_system/edit_screen.dart';
-import 'package:registration_system/registration_screen.dart';
-import 'package:registration_system/students_list_screen.dart';
-import 'package:registration_system/welcome_screen.dart';
+import 'package:registration_system/screens/edit_screen.dart';
+import 'package:registration_system/screens/registration_screen.dart';
+import 'package:registration_system/screens/students_list_screen.dart';
+import 'package:registration_system/screens/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
