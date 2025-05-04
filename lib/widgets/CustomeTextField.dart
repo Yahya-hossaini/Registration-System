@@ -5,6 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String title;
   final String hintText;
   final TextInputType keyboardType;
+  final double bottomSpacing;
 
   const CustomTextField({
     super.key,
@@ -12,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     required this.title,
     required this.hintText,
     required this.keyboardType,
+    this.bottomSpacing = 10.0, //Optional
   });
 
   @override
@@ -35,8 +37,8 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(
-          height: 10,
+        SizedBox(
+          height: bottomSpacing,
         )
       ],
     );
