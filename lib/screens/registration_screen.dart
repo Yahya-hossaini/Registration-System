@@ -1,11 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:registration_system/data_provider.dart';
 import 'package:registration_system/widgets/custom_appbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import '../database_helper.dart';
 import '../widgets/ClearAndNewFormButtons.dart';
 import '../widgets/CustomeTextField.dart';
 import '../widgets/RegisterSaveButton.dart';
+import 'package:provider/provider.dart';
+
 
 class RegistrationScreen extends StatefulWidget {
   static const routeName = '/registration-Screen';
@@ -55,17 +56,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       'department': department,
     };
 
-    await DatabaseHelper.instance.insertRegistration(row);
+    try {
+      await Provider.of<DataProvider>(context, listen: false).addNewStudent(row);
 
-    final data = await DatabaseHelper.instance.getAllRegistrations();
-    print("All Registrations:");
-    for (var row in data) {
-      print(row);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Registration saved!")),
+      );
+
+      //Clearing the form after submission
+      _clearForm();
+
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to save: $e")),
+      );
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Registration saved!")),
-    );
+    print(Provider.of<DataProvider>(context, listen: false).registration);
   }
 
   //-------------------------------------------------------------------------------------

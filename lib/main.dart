@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:registration_system/data_provider.dart';
 import 'package:registration_system/screens/edit_screen.dart';
 import 'package:registration_system/screens/registration_screen.dart';
 import 'package:registration_system/screens/students_list_screen.dart';
 import 'package:registration_system/screens/welcome_screen.dart';
 import 'package:registration_system/database_utils.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await deleteOldDatabase();
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => DataProvider()..fetchRegisteredStudents(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({super.key});
 
   @override
@@ -37,4 +42,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
