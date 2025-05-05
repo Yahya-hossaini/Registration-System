@@ -17,6 +17,16 @@ class DataProvider with ChangeNotifier{
     await fetchRegisteredStudents();
   }
 
+  Future<void> deleteStudent(int id) async {
+    await DatabaseHelper.instance.deleteStudent(id);
+    await fetchRegisteredStudents();
+  }
+
+  Future<void> updateStudent(Map<String, dynamic> updatedStudent) async {
+    await DatabaseHelper.instance.updateStudent(updatedStudent);
+    await fetchRegisteredStudents();
+  }
+
   Future<void> closeDB() async {
     await DatabaseHelper.instance.close();
   }

@@ -58,18 +58,14 @@ class DatabaseHelper {
     );
   }
 
-
-// Future<List<String>> getAllNames() async {
-  //   final db = await instance.database;
-  //
-  //   final result = await db.query(
-  //     'registrations',      // your table name
-  //     columns: ['name'],    // select only the name column
-  //   );
-  //
-  //   // Extract names from result
-  //   return result.map((row) => row['name'] as String).toList();
-  // }
-
+  Future<int> updateStudent(Map<String, dynamic> row) async {
+    final db = await instance.database;
+    return await db.update(
+      'registrations',
+      row,
+      where: 'id = ?',
+      whereArgs: [row['id']],
+    );
+  }
 
 }

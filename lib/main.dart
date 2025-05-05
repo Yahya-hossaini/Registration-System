@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:registration_system/data_provider.dart';
-import 'package:registration_system/screens/edit_screen.dart';
 import 'package:registration_system/screens/registration_screen.dart';
 import 'package:registration_system/screens/students_list_screen.dart';
 import 'package:registration_system/screens/welcome_screen.dart';
@@ -37,7 +36,6 @@ class MyApp extends StatelessWidget {
         WelcomeScreen.routeName: (ctx) => const WelcomeScreen(),
         RegistrationScreen.routeName: (ctx) => const RegistrationScreen(),
         StudentsListScreen.routeName: (ctx) => const StudentsListScreen(),
-        EditScreen.routeName: (ctx) => const EditScreen(),
       },
     );
   }
