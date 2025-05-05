@@ -8,7 +8,6 @@ import 'package:registration_system/widgets/RegisterSaveButton.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 class EditStudentScreen extends StatefulWidget {
-  static const routeName = '/Edit-Screen';
   final Map<String, dynamic> studentData;
 
   const EditStudentScreen({super.key, required this.studentData});

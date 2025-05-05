@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:registration_system/screens/details_screen.dart';
 import 'package:registration_system/screens/edit_screen.dart';
 import 'package:registration_system/widgets/custom_appbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -147,30 +148,43 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                     Text('ID: ${student['studentId']}'),
                                   ],
                                 ),
-                                PopupMenuButton<String>(
-                                  onSelected: (value) async {
-                                    if (value == 'edit') {
+                                Row(
+                                  children: [
+                                    IconButton(onPressed: (){
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => EditStudentScreen(
+                                          builder: (_) => DetailsScreen(
                                               studentData: student),
                                         ),
                                       );
-                                    } else if (value == 'delete') {
-                                      await Provider.of<DataProvider>(context,
-                                              listen: false)
-                                          .deleteStudent(student['id']);
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) => [
-                                    const PopupMenuItem(
-                                      value: 'edit',
-                                      child: Text('Edit'),
-                                    ),
-                                    const PopupMenuItem(
-                                      value: 'delete',
-                                      child: Text('Delete'),
+                                    }, icon: Icon(Icons.open_in_new),),
+                                    PopupMenuButton<String>(
+                                      onSelected: (value) async {
+                                        if (value == 'edit') {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => EditStudentScreen(
+                                                  studentData: student),
+                                            ),
+                                          );
+                                        } else if (value == 'delete') {
+                                          await Provider.of<DataProvider>(context,
+                                                  listen: false)
+                                              .deleteStudent(student['id']);
+                                        }
+                                      },
+                                      itemBuilder: (BuildContext context) => [
+                                        const PopupMenuItem(
+                                          value: 'edit',
+                                          child: Text('Edit'),
+                                        ),
+                                        const PopupMenuItem(
+                                          value: 'delete',
+                                          child: Text('Delete'),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
