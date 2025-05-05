@@ -23,6 +23,22 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
   late TextEditingController ageController;
   String? _selectedValue;
 
+  //FocusNodes for text fields
+  FocusNode nameFocus = FocusNode();
+  FocusNode lastNameFocus = FocusNode();
+  FocusNode ageFocus = FocusNode();
+  FocusNode idFocus = FocusNode();
+
+  @override
+  void dispose() {
+    // Dispose focus nodes
+    nameFocus.dispose();
+    lastNameFocus.dispose();
+    ageFocus.dispose();
+    idFocus.dispose();
+    super.dispose();
+  }
+
   final List<String> _options = ['Software', 'Network', 'Database'];
 
   @override
@@ -81,112 +97,126 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
 
     return Scaffold(
       appBar: CustomAppBar().buildPreferredSize(context, 'Edit Student'),
-      body: SingleChildScrollView(
-        child: Container(
-          height: size.height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0XFF89FDFF),
-                Color(0XFF89FDFF),
-                Color(0XFF89FDFF),
-                Color(0XFF489A9B),
-              ],
+      body: LayoutBuilder(
+        builder: (context, constraints){
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0XFF89FDFF),
+                      Color(0XFF89FDFF),
+                      Color(0XFF89FDFF),
+                      Color(0XFF489A9B),
+                    ],
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.06,
+                  vertical: size.height * 0.1,
+                ),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: nameController,
+                      title: 'Name',
+                      hintText: 'e.g Farhad',
+                      keyboardType: TextInputType.name,
+                      focusNode: nameFocus,
+                      onSubmit: () => FocusScope.of(context).requestFocus(lastNameFocus),
+                    ),
+                    CustomTextField(
+                      controller: lastNameController,
+                      title: 'Last Name',
+                      hintText: 'e.g Hossaini',
+                      keyboardType: TextInputType.name,
+                      focusNode: lastNameFocus,
+                      onSubmit: () => FocusScope.of(context).requestFocus(ageFocus),
+                    ),
+                    CustomTextField(
+                      controller: ageController,
+                      title: 'Age',
+                      hintText: 'e.g 20',
+                      keyboardType: TextInputType.number,
+                      focusNode: ageFocus,
+                      onSubmit: () => FocusScope.of(context).requestFocus(idFocus),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Department:',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        DropdownButtonFormField2<String>(
+                          value: _selectedValue,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Select a department',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 16),
+                          ),
+                          isExpanded: true,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedValue = newValue;
+                            });
+                          },
+                          items: _options
+                              .map(
+                                (item) => DropdownMenuItem(
+                              value: item,
+                              child: Text(item, style: const TextStyle(fontSize: 16)),
+                            ),
+                          )
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            controller: idController,
+                            title: 'Student ID',
+                            hintText: 'D4050',
+                            keyboardType: TextInputType.text,
+                            bottomSpacing: 0,
+                            focusNode: idFocus,
+                            onSubmit: () => idFocus.unfocus,
+                          ),
+                        ),
+                        const SizedBox(width: 40),
+                        Expanded(
+                          child: ClearNewFormElevatedButton(
+                            title: 'Clear form',
+                            handler: _clearForm,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    RegisterSaveButton(
+                      title: 'Save Changes',
+                      handler: _saveChanges,
+                      icon: Icons.save_alt,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.06,
-            vertical: size.height * 0.15,
-          ),
-          child: Column(
-            children: [
-              CustomTextField(
-                controller: nameController,
-                title: 'Name',
-                hintText: 'e.g Farhad',
-                keyboardType: TextInputType.name,
-              ),
-              CustomTextField(
-                controller: lastNameController,
-                title: 'Last Name',
-                hintText: 'e.g Hossaini',
-                keyboardType: TextInputType.name,
-              ),
-              CustomTextField(
-                controller: ageController,
-                title: 'Age',
-                hintText: 'e.g 20',
-                keyboardType: TextInputType.number,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Department:',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  DropdownButtonFormField2<String>(
-                    value: _selectedValue,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Select a department',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 16),
-                    ),
-                    isExpanded: true,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedValue = newValue;
-                      });
-                    },
-                    items: _options
-                        .map(
-                          (item) => DropdownMenuItem(
-                        value: item,
-                        child: Text(item, style: const TextStyle(fontSize: 16)),
-                      ),
-                    )
-                        .toList(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: CustomTextField(
-                      controller: idController,
-                      title: 'Student ID',
-                      hintText: 'D4050',
-                      keyboardType: TextInputType.text,
-                      bottomSpacing: 0,
-                    ),
-                  ),
-                  const SizedBox(width: 40),
-                  Expanded(
-                    child: ClearNewFormElevatedButton(
-                      title: 'Clear form',
-                      handler: _clearForm,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              RegisterSaveButton(
-                title: 'Save Changes',
-                handler: _saveChanges,
-                icon: Icons.save_alt,
-              ),
-            ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }

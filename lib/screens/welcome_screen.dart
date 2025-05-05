@@ -24,80 +24,89 @@ class WelcomeScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0XFF89FDFF),
-                Color(0XFF89FDFF),
-                Color(0XFF89FDFF),
-                Color(0XFF489A9B),
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: size.height * 0.15,
-              horizontal: size.width * 0.06,
-            ),
-            child: Center(
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      const AppIcon(
-                        radius: 46,
-                        fontSize: 56,
-                      ),
-                      SizedBox(height: size.height * 0.04),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+        body: LayoutBuilder(
+          builder: (context, constraints){
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0XFF89FDFF),
+                        Color(0XFF89FDFF),
+                        Color(0XFF89FDFF),
+                        Color(0XFF489A9B),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: size.height * 0.15,
+                      horizontal: size.width * 0.06,
+                    ),
+                    child: Center(
+                      child: Column(
                         children: [
-                          Text(
-                            'Welcome',
-                            style: TextStyle(fontSize: 24),
+                          Column(
+                            children: [
+                              const AppIcon(
+                                radius: 46,
+                                fontSize: 56,
+                              ),
+                              SizedBox(height: size.height * 0.04),
+                              const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Welcome',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            width: 4,
+                            height: size.height * 0.20,
                           ),
-                          Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )
+                          Column(
+                            children: [
+                              CustomElevatedButton(
+                                title: 'Register new Student',
+                                handler: () {
+                                  Navigator.pushNamed(
+                                      context, RegistrationScreen.routeName);
+                                },
+                              ),
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                              CustomElevatedButton(
+                                title: 'View Students',
+                                handler: () {
+                                  Navigator.pushNamed(
+                                      context, StudentsListScreen.routeName);
+                                },
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                  SizedBox(
-                    height: size.height * 0.20,
-                  ),
-                  Column(
-                    children: [
-                      CustomElevatedButton(
-                        title: 'Register new Student',
-                        handler: () {
-                          Navigator.pushNamed(
-                              context, RegistrationScreen.routeName);
-                        },
-                      ),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      CustomElevatedButton(
-                        title: 'View Students',
-                        handler: () {
-                          Navigator.pushNamed(
-                              context, StudentsListScreen.routeName);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

@@ -7,7 +7,6 @@ import '../widgets/CustomeTextField.dart';
 import '../widgets/RegisterSaveButton.dart';
 import 'package:provider/provider.dart';
 
-
 class RegistrationScreen extends StatefulWidget {
   static const routeName = '/registration-Screen';
 
@@ -23,6 +22,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
+
+  //FocusNodes for text fields
+  FocusNode nameFocus = FocusNode();
+  FocusNode lastNameFocus = FocusNode();
+  FocusNode ageFocus = FocusNode();
+  FocusNode idFocus = FocusNode();
+
+  @override
+  void dispose() {
+    // Dispose focus nodes
+    nameFocus.dispose();
+    lastNameFocus.dispose();
+    ageFocus.dispose();
+    idFocus.dispose();
+    super.dispose();
+  }
 
   //Options for departments
   final List<String> _options = ['Software', 'Network', 'Database'];
@@ -57,7 +72,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     };
 
     try {
-      await Provider.of<DataProvider>(context, listen: false).addNewStudent(row);
+      await Provider.of<DataProvider>(context, listen: false)
+          .addNewStudent(row);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Registration saved!")),
@@ -65,7 +81,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       //Clearing the form after submission
       _clearForm();
-
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to save: $e")),
@@ -93,139 +108,149 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return Scaffold(
       appBar: CustomAppBar().buildPreferredSize(context, 'Registration'),
-      body: SizedBox(
-        height: size.height,
-        child: SingleChildScrollView(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0XFF89FDFF),
-                  Color(0XFF89FDFF),
-                  Color(0XFF89FDFF),
-                  Color(0XFF489A9B),
-                ],
-              ),
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.06,
-                vertical: size.height * 0.15,
-              ),
-              child: Center(
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        CustomTextField(
-                          controller: nameController,
-                          title: 'Name',
-                          hintText: 'e.g Farhad',
-                          keyboardType: TextInputType.name,
-                        ),
-                        CustomTextField(
-                          controller: lastNameController,
-                          title: 'Last Name',
-                          hintText: 'e.g Hossaini',
-                          keyboardType: TextInputType.name,
-                        ),
-                        CustomTextField(
-                          controller: ageController,
-                          title: 'Age',
-                          hintText: 'e.g 20,',
-                          keyboardType: TextInputType.number,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Department:',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            SizedBox(
-                              child: DropdownButtonFormField2<String>(
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Select a department',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+      body: LayoutBuilder(
+        builder: (context, constraints){
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0XFF89FDFF),
+                      Color(0XFF89FDFF),
+                      Color(0XFF89FDFF),
+                      Color(0XFF489A9B),
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.06,
+                    vertical: size.height * 0.1,
+                  ),
+                  child: Column(
+                    children: [
+                      Column(
+                        children: [
+                          CustomTextField(
+                            controller: nameController,
+                            title: 'Name',
+                            hintText: 'e.g Farhad',
+                            keyboardType: TextInputType.name,
+                            focusNode: nameFocus,
+                            onSubmit: () => FocusScope.of(context).requestFocus(lastNameFocus),
+                          ),
+                          CustomTextField(
+                            controller: lastNameController,
+                            title: 'Last Name',
+                            hintText: 'e.g Hossaini',
+                            keyboardType: TextInputType.name,
+                            focusNode: lastNameFocus,
+                            onSubmit: () => FocusScope.of(context).requestFocus(ageFocus),
+                          ),
+                          CustomTextField(
+                            controller: ageController,
+                            title: 'Age',
+                            hintText: 'e.g 20',
+                            keyboardType: TextInputType.number,
+                            focusNode: ageFocus,
+                            onSubmit: () => FocusScope.of(context).requestFocus(idFocus),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Department:',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              SizedBox(
+                                child: DropdownButtonFormField2<String>(
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    hintText: 'Select a department',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 16),
                                   ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 16),
-                                ),
-                                isExpanded: true,
-                                hint: const Text(
-                                  'Select a department',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                value: _selectedValue,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedValue = newValue;
-                                  });
-                                },
-                                items: _options
-                                    .map(
-                                      (item) => DropdownMenuItem(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                          ),
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    'Select a department',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  value: _selectedValue,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _selectedValue = newValue;
+                                    });
+                                  },
+                                  items: _options
+                                      .map(
+                                        (item) => DropdownMenuItem(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 16,
                                         ),
                                       ),
-                                    )
-                                    .toList(),
+                                    ),
+                                  )
+                                      .toList(),
+                                ),
                               ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                              controller: idController,
+                              title: 'Student ID',
+                              hintText: 'D4050',
+                              keyboardType: TextInputType.text,
+                              bottomSpacing: 0,
+                              focusNode: idFocus,
+                              onSubmit: () => idFocus.unfocus(),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            controller: idController,
-                            title: 'Student ID',
-                            hintText: 'D4050',
-                            keyboardType: TextInputType.text,
-                            bottomSpacing: 0,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 40,
-                        ),
-                        Expanded(
-                          child: ClearNewFormElevatedButton(
-                            title: 'Clear form',
-                            handler: _clearForm,
+                          const SizedBox(
+                            width: 40,
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    RegisterSaveButton(
-                      title: 'Register',
-                      handler: _saveRegistration,
-                      icon: Icons.person_add_outlined,
-                    ),
-                  ],
+                          Expanded(
+                            child: ClearNewFormElevatedButton(
+                              title: 'Clear form',
+                              handler: _clearForm,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      RegisterSaveButton(
+                        title: 'Register',
+                        handler: _saveRegistration,
+                        icon: Icons.person_add_outlined,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

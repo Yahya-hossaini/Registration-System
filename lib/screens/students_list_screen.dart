@@ -108,9 +108,11 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                 ),
               ),
               const SizedBox(height: 20),
+              const Divider(thickness: 2, color: Colors.black,),
+              const SizedBox(height: 20),
               Expanded(
                 child: filteredStudents.isEmpty
-                    ? const Center(child: Text('No students found'))
+                    ? const Center(child: Text('No students found', style: TextStyle(fontSize: 20),),)
                     : ListView.builder(
                         itemCount: filteredStudents.length,
                         itemBuilder: (context, index) {

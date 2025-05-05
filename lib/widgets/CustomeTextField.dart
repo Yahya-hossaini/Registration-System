@@ -6,6 +6,8 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextInputType keyboardType;
   final double bottomSpacing;
+  final FocusNode focusNode;
+  final VoidCallback onSubmit;
 
   const CustomTextField({
     super.key,
@@ -13,7 +15,9 @@ class CustomTextField extends StatelessWidget {
     required this.title,
     required this.hintText,
     required this.keyboardType,
-    this.bottomSpacing = 10.0, //Optional
+    this.bottomSpacing = 10.0,
+    required this.focusNode,
+    required this.onSubmit, //Optional
   });
 
   @override
@@ -26,12 +30,15 @@ class CustomTextField extends StatelessWidget {
           style: const TextStyle(fontSize: 16),
         ),
         TextField(
+          focusNode: focusNode,
+          onEditingComplete: onSubmit,
           controller: controller,
           keyboardType: keyboardType,
           decoration: InputDecoration(
             fillColor: Colors.white,
             filled: true,
             hintText: hintText,
+            hintStyle: TextStyle(color: Colors.black26),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
