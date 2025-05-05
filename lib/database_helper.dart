@@ -46,10 +46,20 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getAllRegistrations() async {
     final db = await instance.database;
-    return await db.query('registrations'); // Replace with your actual table name
+    return await db.query('registrations');
   }
 
-  // Future<List<String>> getAllNames() async {
+  Future<int> deleteStudent(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      'registrations',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+
+// Future<List<String>> getAllNames() async {
   //   final db = await instance.database;
   //
   //   final result = await db.query(
